@@ -1,7 +1,8 @@
 data/*.csv
 data/*.CSV
+data/*.xlsx
 .env
 __pycache__/
-*.png
+/receita_mensal.png
 .venv/
-data/*.xlsx
+.ipynb_checkpoints/

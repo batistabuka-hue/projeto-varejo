@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16
+    container_name: varejo_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-analista}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-analista123}
+      POSTGRES_DB: ${POSTGRES_DB:-varejo}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # roda só na primeira criação do volume: cria os schemas e a tabela de staging
+      - ./sql/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      # scripts SQL para rodar manualmente (carga, modelo, análises)
+      - ./sql:/sql:ro
+      # coloque aqui o CSV (data/vendas.csv)
+      - ./data:/data:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-analista} -d ${POSTGRES_DB:-varejo}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

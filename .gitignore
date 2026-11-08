@@ -1,0 +1,7 @@
+data/*.csv
+data/*.CSV
+.env
+__pycache__/
+*.png
+.venv/
+data/*.xlsx
